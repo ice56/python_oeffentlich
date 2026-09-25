@@ -6,7 +6,7 @@ from bleak import BleakScanner
 
 # Konfiguration
 TARGET_MAC = "F8:8F:C8:1A:95:66".lower()  # Deine MAC-Adresse
-CSV_FILENAME = "waagen_daten.csv"
+CSV_FILENAME = "waage_daten.csv"
 
 # Globale Variable, um doppelte Speicherungen direkt hintereinander zu vermeiden
 letztes_gewicht = 0.0
@@ -20,7 +20,7 @@ def in_csv_speichern(gewicht):
         return
         
     letztes_gewicht = gewicht
-    zeitstempel = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    zeitstempel = datetime.now().strftime("%d/%m/%Y")
     file_exists = os.path.isfile(CSV_FILENAME)
     
     # CSV-Datei im "Append"-Modus (Anhängen) öffnen
