@@ -3,10 +3,13 @@ import csv
 import os
 from datetime import datetime
 from bleak import BleakScanner
+from pathlib import Path
 
 # Konfiguration
 TARGET_MAC = "F8:8F:C8:1A:95:66".lower()  # Deine MAC-Adresse
 CSV_FILENAME = "waage_daten.csv"
+DATA_DIR = Path(__file__).parent / "Data"
+PATH_AND_FILE = DATA_DIR / CSV_FILENAME
 
 # Globale Variable, um doppelte Speicherungen direkt hintereinander zu vermeiden
 letztes_gewicht = 0.0
@@ -21,10 +24,10 @@ def in_csv_speichern(gewicht):
         
     letztes_gewicht = gewicht
     zeitstempel = datetime.now().strftime("%d/%m/%Y")
-    file_exists = os.path.isfile(CSV_FILENAME)
+    file_exists = os.path.isfile(PATH_AND_FILE)
     
     # CSV-Datei im "Append"-Modus (Anhängen) öffnen
-    with open(CSV_FILENAME, mode='a', newline='', encoding='utf-8') as f:
+    with open(PATH_AND_FILE, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=';')
         
         # Falls die Datei neu ist, Spaltenüberschriften schreiben
@@ -32,7 +35,7 @@ def in_csv_speichern(gewicht):
             writer.writerow(["Zeitstempel", "Gewicht_KG"])
             
         writer.writerow([zeitstempel, f"{gewicht:.2f}"])
-        print(f"💾 In {CSV_FILENAME} gespeichert: {zeitstempel} -> {gewicht:.2f} kg")
+        print(f"💾 In {PATH_AND_FILE} gespeichert: {zeitstempel} -> {gewicht:.2f} kg")
 
 def callback(device, advertising_data):
     if device.address.lower() == TARGET_MAC:
